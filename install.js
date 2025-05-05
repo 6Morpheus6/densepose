@@ -25,13 +25,42 @@ module.exports = {
       }
     },
     {
+      when: "{{platform === 'win32'}}",
       method: "shell.run",
       params: {
+        message: "mkdir C:\\TMP"
+      }
+    },
+    {
+      when: "{{platform === 'win32'}}",
+      method: "shell.run",
+      params: {
+        build: true,
+        env: {
+          TMPDIR: "C:\\TMP",
+          DISTUTILS_USE_SDK: "1"
+        },
         venv: "env",
         path: "app",
         message: [
           "uv pip install -r ../requirements.txt",
-          "uv pip install -e detectron2/projects/DensePose"
+          "pip install -e detectron2/projects/DensePose"
+        ]
+      }
+    },
+    {
+      when: "{{platform !== 'win32'}}",
+      method: "shell.run",
+      params: {
+        build: true,
+        env: {
+          DISTUTILS_USE_SDK: "1"
+        },
+        venv: "env",
+        path: "app",
+        message: [
+          "uv pip install -r ../requirements.txt",
+          "pip install -e detectron2/projects/DensePose"
         ]
       }
     }
